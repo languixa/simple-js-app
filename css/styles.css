@@ -1,0 +1,11 @@
+@keyframes textAnimation { 
+    /* Initial state / 100% { opacity: 1; transform: translateY(0); } / Final state */
+    0% { opacity: 0; transform: translateY(20px); }  
+}
+
+.winner {
+    color: red;
+    animation: textAnimation 3s ease-in-out infinite; /* Apply animation to the text */
+    font-size: x-large;
+
+}
