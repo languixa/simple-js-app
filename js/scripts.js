@@ -50,7 +50,7 @@ const pokemonRepository = (() => {
       const buttonText = objectArray[i].name;
 
       // Write the innerText value of the button to the document
-      document.getElementById("p1").innerHTML = buttonText;
+      document.getElementById("p1").innerHTML = objectArray[i].name + " " + objectArray[i].height + " " + objectArray[i].types;
     });
   }
 })();
