@@ -25,7 +25,15 @@ const pokemonRepository = (() => {
 
   const showDetails = (pokemon) => {
     const pokemonDetails = `${pokemon.name} ${pokemon.height} ${pokemon.types}`;
-    document.getElementById("p1").innerHTML = pokemonDetails;
+
+    // Call loadDetails function before setting the innerHTML
+    loadDetails(pokemon)
+      .then(() => {
+        document.getElementById("p1").innerHTML = pokemonDetails;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   add({ name: "pokeXuxu", height: 7, types: ['grass', 'poison'] });
@@ -33,32 +41,34 @@ const pokemonRepository = (() => {
   add({ name: "pokeTomy", height: 10, types: ['sand', 'water'] });
 
   function loadList() {
-    return fetch(apiUrl).then(function(response) {
-      return response.json();
-    }).then(function(json) {
-      json.results.forEach(function(item) {
-        let pokemon = {
-          name: item.name,
-          detailsUrl: item.url
-        };
-        add(pokemon);
+    return fetch(apiUrl)
+      .then(response => response.json())
+      .then(json => {
+        json.results.forEach(item => {
+          let pokemon = {
+            name: item.name,
+            detailsUrl: item.url
+          };
+          add(pokemon);
+        });
+      })
+      .catch(error => {
+        console.error(error);
       });
-    }).catch(function(e) {
-      console.error(e);
-    });
   }
 
   function loadDetails(item) {
     let url = item.detailsUrl;
-    return fetch(url).then(function(response) {
-      return response.json();
-    }).then(function(details) {
-      item.imageUrl = details.sprites.front_default;
-      item.height = details.height;
-      item.types = details.types;
-    }).catch(function(e) {
-      console.error(e);
-    });
+    return fetch(url)
+      .then(response => response.json())
+      .then(details => {
+        item.imageUrl = details.sprites.front_default;
+        item.height = details.height;
+        item.types = details.types;
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   return {
@@ -71,7 +81,7 @@ const pokemonRepository = (() => {
 
 })();
 
-pokemonRepository.loadList().then(function() {
+pokemonRepository.loadList().then(() => {
   pokemonRepository.getAll().forEach(pokemon => {
     pokemonRepository.addListItem(pokemon);
   });
