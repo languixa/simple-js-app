@@ -2,8 +2,6 @@ const pokemonRepository = (() => {
   let pokemonList = [];
   let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
 
-  let activeModal = null;
-
   const getAll = () => {
     return pokemonList;
   };
@@ -21,33 +19,22 @@ const pokemonRepository = (() => {
     listItem.appendChild(button);
 
     button.addEventListener('click', function() {
-      if (activeModal) {
-        activeModal.remove();
-      }
       showDetails(pokemon);
     });
   }
 
   const showDetails = (pokemon) => {
-    if (activeModal) {
-      activeModal.remove();
-    }
-
     loadDetails(pokemon)
       .then(() => {
-        activeModal = document.createElement('div');
-        activeModal.classList.add('modal');
-        activeModal.innerHTML = `
+        // Show Pokémon details in a modal
+        const modal = document.createElement('div');
+        modal.classList.add('modal');
+        modal.innerHTML = `
           <h2>${pokemon.name}</h2>
           <p>Height: ${pokemon.height}</p>
           <img src="${pokemon.imageUrl}" alt="Pokemon Image">
-          <button id="closeButton">Close Modal</button>
         `;
-        document.body.appendChild(activeModal);
-
-        activeModal.querySelector('#closeButton').addEventListener('click', function() {
-          activeModal.remove();
-        });
+        document.body.appendChild(modal);
       })
       .catch((error) => {
         console.error(error);
@@ -56,7 +43,13 @@ const pokemonRepository = (() => {
 
   // Other existing functions remain unchanged
 
-   function loadList() {
+  /*
+  add({ name: "pokeXuxu", height: 7, types: ['grass', 'poison'] });
+  add({ name: "pokeBubu", height: 5, types: ['rock', 'juice'] });
+  add({ name: "pokeTomy", height: 10, types: ['sand', 'water'] });
+  */
+
+  function loadList() {
     return fetch(apiUrl)
       .then(response => response.json())
       .then(json => {
@@ -86,6 +79,7 @@ const pokemonRepository = (() => {
         console.error(error);
       });
   }
+
 
 
   return {
